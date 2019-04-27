@@ -2,6 +2,7 @@ import json
 import os
 import string
 
+from itertools import chain
 from tmo import exceptions as tmo_exceptions
 from tmo import filters as tmo_filters
 
@@ -71,6 +72,12 @@ class TMOEngine:
             raise tmo_exceptions.TemplatesNotInitialized
         if self.formatter is None:
             raise tmo_exceptions.TemplatesNotInitialized
+
+        if ATTRIB_SEPARATOR not in template_id:
+            # automatically switch to a plural template if appropriate; if there isn't one, we'll
+            # just revert to the original template_id
+            plurals = sorted('%ss' % k for k, v in kwargs.items() if isinstance(v, (list,tuple)) and len(v) > 1)
+            template_id = ATTRIB_SEPARATOR.join(chain([template_id], plurals))
 
         try:
             template = self.templates[template_id]

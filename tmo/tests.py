@@ -15,19 +15,27 @@ class TestTMOEngine(unittest.TestCase):
         tmo_engine.load_templates(TEMPLATES_PATH)
 
     def test_engine(self):
-        s = gettext('fav_color', name='John', color=['red', 'blue', 'green'])
-        self.assertEqual(s, 'My name is John and my favourite colors is red, blue and green.')
+        # automatically select singular or plural template
+        s = gettext('fav_color', name='John', color='red')
+        self.assertEqual(s, 'My name is John and my favourite color is red.')
 
-        s = gettext('fav_color#p', name='John', color=['red', 'blue', 'green'])
+        s = gettext('fav_color', name='John', color=['red'])
+        self.assertEqual(s, 'My name is John and my favourite color is red.')
+
+        s = gettext('fav_color', name='John', color=['red', 'blue', 'green'])
         self.assertEqual(s, 'My name is John and my favourite colors are red, blue and green.')
 
-        s = gettext('fav_car#p', car=['bmw', 'mercedes'])
+        # there is no plural template - fall back to the singular
+        s = gettext('fav_car', car=['bmw', 'mercedes'])
         self.assertEqual(s, 'My favourite car is bmw and mercedes.')
 
-        s = gettext('fav_car#p', car=['bmw'])
+        s = gettext('fav_car#cars', car=['bmw', 'mercedes'])
+        self.assertEqual(s, 'My favourite car is bmw and mercedes.')
+
+        s = gettext('fav_car', car=['bmw'])
         self.assertEqual(s, 'My favourite car is bmw.')
 
-        s = gettext('fav_car#p', car='bmw')
+        s = gettext('fav_car', car='bmw')
         self.assertEqual(s, 'My favourite car is bmw.')
 
         s = gettext('fav_car', car='bmw')
@@ -43,7 +51,7 @@ class TestTMOEngine(unittest.TestCase):
         s = gettext('fav_number', number=1.21513)
         self.assertEqual(s, 'My favourite number is 1.22.')
 
-        s = gettext('fav_country#p', country=['Great Britain', 'USA', 'Czech Republic'])
+        s = gettext('fav_country', country=['Great Britain', 'USA', 'Czech Republic'])
         self.assertEqual(s, 'My favourite countries are the Great Britain, the USA and the Czech Republic.')
 
 

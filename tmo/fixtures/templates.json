@@ -1,9 +1,9 @@
 {
   "fav_car": "My favourite car is {car}.",
-  "fav_color": "My name is {name} and my favourite colors is {color}.",
-  "fav_color#p": "My name is {name} and my favourite colors are {color}.",
+  "fav_color": "My name is {name} and my favourite color is {color}.",
+  "fav_color#colors": "My name is {name} and my favourite colors are {color}.",
   "fav_game": "I usually play {game}.",
   "fav_number": "My favourite number is {number:0.2f}.",
   "fav_country": "My favourite country is {country}.",
-  "fav_country#p": "My favourite countries are {country@art('the')}."
+  "fav_country#countrys": "My favourite countries are {country@art('the')}."
 }
