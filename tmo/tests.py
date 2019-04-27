@@ -51,7 +51,7 @@ class TestTMOEngine(unittest.TestCase):
         s = gettext('fav_number', number=1.21513)
         self.assertEqual(s, 'My favourite number is 1.22.')
 
-        s = gettext('fav_country#p', country=['Great Britain', 'USA', 'Czech Republic'])
+        s = gettext('fav_country', country=['Great Britain', 'USA', 'Czech Republic'])
         self.assertEqual(s, 'My favourite countries are the Great Britain, the USA and the Czech Republic.')
 
 
