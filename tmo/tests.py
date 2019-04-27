@@ -29,13 +29,13 @@ class TestTMOEngine(unittest.TestCase):
         s = gettext('fav_car', car=['bmw', 'mercedes'])
         self.assertEqual(s, 'My favourite car is bmw and mercedes.')
 
-        s = gettext('fav_car#p', car=['bmw', 'mercedes'])
+        s = gettext('fav_car#cars', car=['bmw', 'mercedes'])
         self.assertEqual(s, 'My favourite car is bmw and mercedes.')
 
-        s = gettext('fav_car#p', car=['bmw'])
+        s = gettext('fav_car', car=['bmw'])
         self.assertEqual(s, 'My favourite car is bmw.')
 
-        s = gettext('fav_car#p', car='bmw')
+        s = gettext('fav_car', car='bmw')
         self.assertEqual(s, 'My favourite car is bmw.')
 
         s = gettext('fav_car', car='bmw')
