@@ -1,16 +1,26 @@
 import json
+import os
 import string
 
 from tmo import exceptions as tmo_exceptions
+from tmo import filters as tmo_filters
 
 
 ATTRIB_SEPARATOR = '#'
+FILTER_SEPARATOR = '@'
 
 
 class TMOFormatter(string.Formatter):
     """Templated Message Output Formatter"""
     connector_word = ' and '
     separator_char = ', '
+
+    def get_filters(self, key):
+        """Retrieves filter function from key"""
+        if FILTER_SEPARATOR not in key:
+            return key, None
+        key, filter_fn = key.split(FILTER_SEPARATOR)
+        return key, eval('tmo_filters.%s' % filter_fn)
 
     def get_value(self, key, args, kwargs):
         """
@@ -20,9 +30,14 @@ class TMOFormatter(string.Formatter):
         connector_word = kwargs.get('connector_word') or self.connector_word
         separator_char = kwargs.get('separator_char') or self.separator_char
 
+        key, filter_fn = self.get_filters(key)
         val = super().get_value(key, args, kwargs)
+
         if not isinstance(val, (list, tuple)):
-            return val
+            return filter_fn(val) if filter_fn else val
+
+        if filter_fn:
+            val = list(map(filter_fn, val))
 
         v_head, v_tail = val[:-2], val[-2:]
         v_tail = [connector_word.join(v_tail)]
@@ -86,3 +101,12 @@ def gettext(template_id, connector_word=None, separator_char=None, **kwargs):
         **kwargs
     }
     return tmo_engine.gettext(template_id, **kwargs)
+
+
+if __name__ == '__main__':
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    TEMPLATES_PATH = os.path.join(BASE_DIR, 'fixtures', 'templates.json')
+
+    tmo_engine.load_templates(TEMPLATES_PATH)
+
+    print(gettext('fav_obj', objs=['test', 'python', 'others']))
