@@ -15,11 +15,19 @@ class TestTMOEngine(unittest.TestCase):
         tmo_engine.load_templates(TEMPLATES_PATH)
 
     def test_engine(self):
-        s = gettext('fav_color', name='John', color=['red', 'blue', 'green'])
-        self.assertEqual(s, 'My name is John and my favourite colors is red, blue and green.')
+        # automatically select singular or plural template
+        s = gettext('fav_color', name='John', color='red')
+        self.assertEqual(s, 'My name is John and my favourite color is red.')
 
-        s = gettext('fav_color#p', name='John', color=['red', 'blue', 'green'])
+        s = gettext('fav_color', name='John', color=['red'])
+        self.assertEqual(s, 'My name is John and my favourite color is red.')
+
+        s = gettext('fav_color', name='John', color=['red', 'blue', 'green'])
         self.assertEqual(s, 'My name is John and my favourite colors are red, blue and green.')
+
+        # there is no plural template - fall back to the singular
+        s = gettext('fav_car', car=['bmw', 'mercedes'])
+        self.assertEqual(s, 'My favourite car is bmw and mercedes.')
 
         s = gettext('fav_car#p', car=['bmw', 'mercedes'])
         self.assertEqual(s, 'My favourite car is bmw and mercedes.')
