@@ -44,12 +44,11 @@ class TestTMOEngine(unittest.TestCase):
         s = gettext(
             'fav_game',
             game=['World of Warcraft', 'Dirt4'],
-            connector_word=' or '
         )
-        self.assertEqual(s, 'I usually play World of Warcraft or Dirt4.')
+        self.assertEqual(s, 'I usually play the World of Warcraft or the Dirt4.')
 
-        s = gettext('fav_number', number=1.21513)
-        self.assertEqual(s, 'My favourite number is 1.22.')
+        s = gettext('fav_number', number=[1.21513, 1.41342])
+        self.assertEqual(s, 'My favourite number is 1.22 and 1.41.')
 
         s = gettext('fav_country', country=['Great Britain', 'USA', 'Czech Republic'])
         self.assertEqual(s, 'My favourite countries are the Great Britain, the USA and the Czech Republic.')
